@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir> <env-dir>
+
+GOOGLE_DIR="google-cloud/sdk-208.0.0-linux-x86_64/"
+
+### Configure directories
+
+BUILD_DIR=${1:-}
+CACHE_DIR=${2:-}
+ENV_DIR=${3:-}
+
+
+### Constants
+echo $BUILD_DIR
+echo $CACHE_DIR
+echo $ENV_DIR
+
+PACKAGE_FOLDER=$BUILD_DIR/vendor/$GOOGLE_DIR
+
+
+echo "-----> Installing the Google Cloud SDK"
+
+# install our SDK silently
+# (google apparently doesn't really know what silent means)
+$BUILD_DIR/vendor/google-cloud/sdk-208.0.0-linux-x86_64/install.sh -q
+
+
+
+mkdir -p $BUILD_DIR/.profile.d
+cat <<EOF >$BUILD_DIR/.profile.d/heroku-google-cloud.sh
+export PATH="$BUILD_DIR/vendor/$GOOGLE_DIR/bin:\$PATH"
+gcloud auth activate-service-account --key-file $BUILD_DIR/config/google/credentials_dev.json
+EOF
+
