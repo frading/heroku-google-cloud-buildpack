@@ -23,8 +23,8 @@ mkdir -p $BUILD_DIR/.profile.d
 cat <<EOF >$BUILD_DIR/.profile.d/heroku-google-cloud.sh
 export PATH="/app/vendor/$GOOGLE_DIR/bin:\$PATH"
 gcloud auth activate-service-account --key-file /app/config/google/credentials_dev.json
-gcloud components install beta
-gcloud components update
+yes | gcloud components install beta
+yes | gcloud components update
 EOF
 
 echo "-----> Google Cloud SDK authenticated"
